@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { setLoading, setError, setSelectedDrawing } from "../redux/slices/drawingSlice";
@@ -13,8 +13,7 @@ const Dashboard = () => {
   const [userDrawings, setUserDrawings] = useState([]);
   const { loading, error } = useSelector((state) => state.userDrawings);
 
-//   console.log('###################'+userDrawings[0].drawingId)
-useEffect(() => {
+  useEffect(() => {
     if (!user) {
       router.push("/login");
       return null;
@@ -28,7 +27,7 @@ useEffect(() => {
           const data = await res.json();
           setUserDrawings(data);
         } else {
-          throw new Error('Failed to fetch user data');
+          throw new Error("Failed to fetch user data");
         }
       } catch (error) {
         setError(error.message);
@@ -56,47 +55,63 @@ useEffect(() => {
   };
 
   const handleLoadDrawing = async (e) => {
-    const currentDrawing = JSON.parse(e.target.getAttribute('data-drawing'));
+    const currentDrawing = JSON.parse(e.target.getAttribute("data-drawing"));
     const drawingData = {
-        id: currentDrawing.drawingId,
-        name: currentDrawing.name,
-        jsonData: currentDrawing.drawing
-      };
+      id: currentDrawing.drawingId,
+      name: currentDrawing.name,
+      jsonData: currentDrawing.drawing,
+    };
     dispatch(setSelectedDrawing(drawingData));
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg pt-24 pb-24 space-y-4">
-        <h2 className="text-2xl font-semibold text-center mb-6">
-          User Profile
-        </h2>
-        <h1 className="text-base">Welcome User: <span className="text-indigo-500">{user.email}</span></h1>
-        <h1>
-          <Link href="/drawNew" className="text-xl text-blue-800">
-            Create a new drawing
-          </Link>
-        </h1>
-        <h1 className="text-base font-semibold">Your saved drawings</h1>
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg pt-12 pb-24 space-y-4">
+        <div className="text-right">
+          <h1 className="text-base">
+            Welcome,{" "}
+            <span className="text-indigo-500 text-s">{user.email}</span>
+          </h1>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="px-4 py-2 text-white
+              bg-red-400 rounded-md
+              hover:bg-red-500 focus:outline-none
+              focus:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
+        <div>
+          <h1 className="pt-2 pb-2 text-right">
+            <Link
+              href="/drawNew"
+              className="px-4 py-2 text-white
+              bg-indigo-500 rounded-md
+              hover:bg-indigo-600 focus:outline-none
+              focus:bg-indigo-700"
+            >
+              Create a new drawing
+            </Link>
+          </h1>
+        </div>
+        <h2 className="text-2xl font-semibold text-center mb-6">My Drawings</h2>
+        <p className="text-base">Click on a drawing to view</p>
         {userDrawings.map((drawing) => (
           <div key={drawing.drawingId} className="mb-4">
             <li>
-              <Link href="/loadDrawing" onClick={handleLoadDrawing} data-drawing={JSON.stringify(drawing)} className="text-xl text-blue-800">
+              <Link
+                href="/loadDrawing"
+                onClick={handleLoadDrawing}
+                data-drawing={JSON.stringify(drawing)}
+                className="text-l text-indigo-900"
+              >
                 {drawing.name}
               </Link>
             </li>
           </div>
         ))}
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="w-full px-4 py-2 text-white
-              bg-indigo-500 rounded-md
-              hover:bg-indigo-600 focus:outline-none
-              focus:bg-indigo-700"
-        >
-          Logout
-        </button>
       </div>
     </div>
   );

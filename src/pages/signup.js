@@ -36,6 +36,7 @@ const SignUp = () => {
           <input
             type="email"
             name="email"
+            maxLength={50}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2 border
@@ -48,6 +49,7 @@ const SignUp = () => {
           <input
             type="password"
             name="password"
+            maxLength={20}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2 border

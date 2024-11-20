@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Stage, Layer, Line } from "react-konva";
@@ -40,11 +39,17 @@ const NewDrawing = () => {
     isDrawing.current = false;
   };
 
-  const handleSaveDrawing = async () => {
+  const handleSaveDrawing = async (e) => {
+    e.preventDefault();
     const userId = user.uid;
     const drawingName = drawingNameRef.current.value;
     const stage = stageRef.current;
     const drawingData = stage.toJSON();
+
+    if (drawingName.trim() === "") {
+      alert("Please enter a drawing name");
+      return;
+    }
 
     await fetch("http://localhost:3000/api/save", {
       method: "POST",
@@ -59,22 +64,52 @@ const NewDrawing = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl space-y-4">
-        <h1 className="text-2xl font-semibold text-center mb-6">New canvas</h1>
+        <div className="text-right">
+          <h1 className="text-base">
+            Welcome,{" "}
+            <span className="text-indigo-500 text-s">{user.email}</span>
+          </h1>
+          <button
+            type="button"
+            onClick={() => router.push("/logout")}
+            className="px-4 py-2 text-white
+              bg-red-400 rounded-md
+              hover:bg-red-500 focus:outline-none
+              focus:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
+        <div className="text-right">
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard")}
+            className="px-4 py-2 text-white text-right
+              bg-indigo-500 rounded-md
+              hover:bg-indigo-600 focus:outline-none
+              focus:bg-indigo-700"
+          >
+            Back to dashboard
+          </button>
+        </div>
+        <h1 className="text-2xl font-semibold text-center mb-6">New drawing</h1>
 
-        <select
-          className="w-full px-4 py-2 border
+        <div className="w-full flex">
+          <label className="w-min sm:w-1/4 pt-2">Select a tool: </label>
+          <select
+            className="w-full px-4 py-2 border
              border-gray-300 rounded-md
              focus:outline-none focus:ring-2
              focus:ring-indigo-500"
-          value={tool}
-          onChange={(e) => {
-            setTool(e.target.value);
-          }}
-        >
-          <option value="pen">Pen</option>
-          <option value="eraser">Eraser</option>
-        </select>
-
+            value={tool}
+            onChange={(e) => {
+              setTool(e.target.value);
+            }}
+          >
+            <option value="pen">Pen</option>
+            <option value="eraser">Eraser</option>
+          </select>
+        </div>
         <div id="drawingContainer"></div>
         <Stage
           width={624}
@@ -105,12 +140,13 @@ const NewDrawing = () => {
         <input
           type="text"
           ref={drawingNameRef}
+          maxLength={20}
           className="w-full px-4 py-2 border
               border-gray-300 rounded-md
               focus:outline-none focus:ring-2
               focus:ring-indigo-500"
           placeholder="Name your drawing"
-          required={true}
+          required
         />
         <button
           type="submit"
@@ -121,16 +157,6 @@ const NewDrawing = () => {
               focus:bg-indigo-700"
         >
           Save
-        </button>
-        <button
-          type="button"
-          onClick={() => router.push("/dashboard")}
-          className="w-full px-4 py-2 text-white
-              bg-indigo-500 rounded-md
-              hover:bg-indigo-600 focus:outline-none
-              focus:bg-indigo-700"
-        >
-          Back to dashboard
         </button>
       </div>
     </div>
