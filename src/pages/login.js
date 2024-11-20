@@ -65,6 +65,16 @@ const Login = () => {
           >
             Login
           </button>
+          <button
+            type="button"
+            onClick={() => router.push("/signup")}
+            className="w-full px-4 py-2 text-white
+              bg-indigo-500 rounded-md
+              hover:bg-indigo-600 focus:outline-none
+              focus:bg-indigo-700"
+          >
+            Signup
+          </button>
         </form>
       </div>
     </div>

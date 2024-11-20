@@ -27,7 +27,7 @@ const LoadDrawing = () => {
         <div id="drawingContainer"></div>
         
         <button
-          type="submit"
+          type="button"
           onClick={() => router.push("/dashboard")}
           className="w-full px-4 py-2 text-white
               bg-indigo-500 rounded-md

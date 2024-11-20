@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 const NewDrawing = () => {
   const router = useRouter();
   const { user } = useSelector((state) => state.auth);
-  console.log(user.uid);
   const stageRef = React.useRef(null);
   const drawingNameRef = React.useRef(null);
 
@@ -111,7 +110,7 @@ const NewDrawing = () => {
               focus:outline-none focus:ring-2
               focus:ring-indigo-500"
           placeholder="Name your drawing"
-          required
+          required={true}
         />
         <button
           type="submit"
@@ -124,7 +123,7 @@ const NewDrawing = () => {
           Save
         </button>
         <button
-          type="submit"
+          type="button"
           onClick={() => router.push("/dashboard")}
           className="w-full px-4 py-2 text-white
               bg-indigo-500 rounded-md
