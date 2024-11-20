@@ -1,7 +1,13 @@
+import { select } from "@material-tailwind/react";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   drawings: [],
+  selectedDrawing: {
+    drawingId: null,
+    name: null,
+    jsonData: {},
+  },
   loading: false,
   error: null,
 };
@@ -19,9 +25,12 @@ const drawingSlice = createSlice({
     setError(state, action) {
       state.error = action.payload;
     },
+    setSelectedDrawing(state, action) {
+      state.selectedDrawing = action.payload;
+    },
   },
 });
 
-export const { setDrawings, setLoading, setError } = drawingSlice.actions;
+export const { setDrawings, setLoading, setError, setSelectedDrawing } = drawingSlice.actions;
 
 export default drawingSlice.reducer;
