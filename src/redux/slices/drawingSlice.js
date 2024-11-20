@@ -1,4 +1,3 @@
-import { select } from "@material-tailwind/react";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {

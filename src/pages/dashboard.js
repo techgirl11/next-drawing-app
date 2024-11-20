@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { setLoading, setError, setSelectedDrawing } from "../redux/slices/drawingSlice";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { setDrawings } from "@/redux/slices/drawingSlice";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { user } = useSelector((state) => state.auth);
-  const [userDrawings, setUserDrawings] = useState([]);
-  const { loading, error } = useSelector((state) => state.userDrawings);
+  const { drawings, loading, error } = useSelector((state) => state.userDrawings);
 
   useEffect(() => {
     if (!user) {
@@ -26,7 +26,7 @@ const Dashboard = () => {
 
         if (res.ok) {
           const data = await res.json();
-          setUserDrawings(data);
+          dispatch(setDrawings(data));
         } else {
           throw new Error("Failed to fetch user data");
         }
@@ -107,7 +107,7 @@ const Dashboard = () => {
         </div>
         <h2 className="text-2xl font-semibold text-center mb-6">My Drawings</h2>
         <p className="text-base">Click on a drawing to view</p>
-        {userDrawings.map((drawing) => (
+        {drawings.map((drawing) => (
           <div key={drawing.drawingId} className="mb-4">
             <li>
               <Link
