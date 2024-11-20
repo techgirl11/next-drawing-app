@@ -5,6 +5,14 @@ import { useRouter } from "next/router";
 import { getAuth, signOut } from "firebase/auth";
 import { logout } from "../redux/slices/authSlice";
 
+/**
+ * NewDrawing component
+ *
+ * Renders a page for creating a new drawing.
+ * Allows the user to draw on the canvas and save drawing.
+ *
+ * @returns {React.ReactElement} The rendered new drawing page component
+ */
 const NewDrawing = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -42,6 +50,13 @@ const NewDrawing = () => {
     isDrawing.current = false;
   };
 
+  /**
+   * Handles saving a new drawing to the server
+   *
+   * Post the data to /api/save endpoint 
+   *
+   * @param {Event} e The button click event
+   */
   const handleSaveDrawing = async (e) => {
     e.preventDefault();
     const userId = user.uid;
@@ -64,6 +79,9 @@ const NewDrawing = () => {
       .catch((error) => console.error(error));
   };
 
+  /**
+   * Logs out the current user from the application.
+   */
   const handleLogout = async () => {
     try {
       const auth = getAuth();

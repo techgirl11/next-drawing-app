@@ -1,5 +1,14 @@
 import firebaseApp from "../../firebaseConfig";
 import { getDocs, collection, query, where, getFirestore } from "firebase/firestore";
+/**
+ * Handles a GET request to the /api/list endpoint.
+ *
+ * Given a userId, it fetches the user's drawings from the Firestore database
+ * and returns them as a JSON response.
+ *
+ * @param {NextApiRequest} req
+ * @param {NextApiResponse} res
+ */
 export default async function handler(req, res) {
   if (req.method === "GET") {
     const { userId } = req.query;
@@ -15,6 +24,13 @@ export default async function handler(req, res) {
   }
 }
 
+/**
+ * Given a userId, it fetches the user's drawings from the Firestore database
+ * and returns them as a JSON object array.
+ *
+ * @param {string} userId
+ * @returns {Promise<array<object>>}
+ */
 async function getUserDrawings(userId) {
   const db = getFirestore(firebaseApp);
   const getUserDrawingsQuery = query(

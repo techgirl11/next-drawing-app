@@ -4,12 +4,25 @@ import { useRouter } from "next/router";
 import { signupStart, signupSuccess, signupFailure } from "../redux/slices/authSlice";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
+/**
+ * This component renders a signup form that allows users to sign up using their email
+ * and password.
+ *
+ * @returns {React.ReactElement} The rendered signup form component
+ */
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
 
+  /**
+   * Handles signup form submission.
+   *
+   * Attempts to sign up the user using Firebase authentication. 
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e The form submission event
+   */
   const handleSignup = async (e) => {
     e.preventDefault();
     dispatch(signupStart());
@@ -19,7 +32,6 @@ const SignUp = () => {
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
-        console.log("User created:", user);
         dispatch(signupSuccess(user));
         router.push("/dashboard");
       })

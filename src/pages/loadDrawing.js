@@ -7,6 +7,13 @@ import Konva from "konva";
 import { getAuth, signOut } from "firebase/auth";
 import { logout } from "../redux/slices/authSlice";
 
+/**
+ * Page for viewing a saved drawing.
+ *
+ * Retrieves the drawing data from the Redux store and loads it into a Konva stage.
+ *
+ * @returns {React.ReactElement} The rendered page component
+ */
 const LoadDrawing = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -17,6 +24,9 @@ const LoadDrawing = () => {
     Konva.Node.create(selectedDrawing.jsonData, "drawingContainer");
   }, []);
 
+  /**
+   * Logs out the current user from the application.
+   */
   const handleLogout = async () => {
     try {
       const auth = getAuth();

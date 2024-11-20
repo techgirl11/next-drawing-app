@@ -4,12 +4,26 @@ import { useRouter } from "next/router";
 import { loginStart, loginSuccess, loginFailure } from "../redux/slices/authSlice";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
+/**
+ * This component renders a login form that allows users to sign in using their email
+ * and password.
+ *
+ * @returns {React.ReactElement} The rendered login form component
+ */
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
 
+  /**
+   * Handles login form submission.
+   *
+   * Attempts to sign in the user using Firebase authentication. 
+   * Upon successful login, the user is redirected to the dashboard.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e The form submission event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(loginStart());

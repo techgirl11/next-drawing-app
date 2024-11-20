@@ -7,6 +7,15 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { setDrawings } from "@/redux/slices/drawingSlice";
 
+/**
+ * Dashboard page
+ *
+ * If the user is not logged in, redirects to the login page.
+ * If the user is logged in, fetches the user's drawings and displays them in a list.
+ * Allows the user to create a new drawing, view an existing drawing, or logout.
+ *
+ * @returns {React.ReactElement}
+ */
 const Dashboard = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -19,6 +28,13 @@ const Dashboard = () => {
       return;
     }
 
+  /**
+   * Fetches the user's drawings from the server
+   *
+   * Calls the /api/list endpoint with the user's ID as a query parameter.
+   * 
+   * @throws {Error} If there is an error fetching the user data
+   */
     const fetchUserData = async () => {
       try {
         dispatch(setLoading(true));
@@ -48,6 +64,13 @@ const Dashboard = () => {
     return <div>Error: {error}</div>;
   }
 
+/**
+ * Logs out the current user from the application.
+ *
+ * Attempts to sign out the user using Firebase authentication, dispatches
+ * the logout action to update the Redux store, and redirects the user 
+ * to the login page.
+ */
   const handleLogout = async () => {
     try {
       const auth = getAuth();
@@ -59,6 +82,15 @@ const Dashboard = () => {
     }
   };
 
+  /**
+   * Handles loading a drawing by the user.
+   *
+   * It parses the data attribute and uses it to create a new drawing data 
+   * object, then dispatches an action to update the Redux store with the 
+   * selected drawing.
+   *
+   * @param {MouseEvent} e The mouse event that triggered the function.
+   */
   const handleLoadDrawing = async (e) => {
     const currentDrawing = JSON.parse(e.target.getAttribute("data-drawing"));
     const drawingData = {
