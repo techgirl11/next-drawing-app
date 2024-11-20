@@ -16,11 +16,12 @@ const Dashboard = () => {
   useEffect(() => {
     if (!user) {
       router.push("/login");
-      return null;
+      return;
     }
 
     const fetchUserData = async () => {
       try {
+        dispatch(setLoading(true));
         const res = await fetch(`http://localhost:3000/api/list?userId=${user.uid}`);
 
         if (res.ok) {
@@ -30,14 +31,14 @@ const Dashboard = () => {
           throw new Error("Failed to fetch user data");
         }
       } catch (error) {
-        setError(error.message);
+        dispatch(setError(error.message));
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     };
 
     fetchUserData();
-  }, [router]);
+  }, [user, dispatch, router]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -48,10 +49,14 @@ const Dashboard = () => {
   }
 
   const handleLogout = async () => {
-    const auth = getAuth();
-    signOut(auth);
-    dispatch(logout());
-    router.push("/login");
+    try {
+      const auth = getAuth();
+      await signOut(auth);
+      dispatch(logout());
+      router.push("/login");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   const handleLoadDrawing = async (e) => {
@@ -63,6 +68,10 @@ const Dashboard = () => {
     };
     dispatch(setSelectedDrawing(drawingData));
   };
+
+  if (!user) {
+    return <div>Redirecting...</div>;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

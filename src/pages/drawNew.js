@@ -1,10 +1,13 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Stage, Layer, Line } from "react-konva";
 import { useRouter } from "next/router";
+import { getAuth, signOut } from "firebase/auth";
+import { logout } from "../redux/slices/authSlice";
 
 const NewDrawing = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const stageRef = React.useRef(null);
   const drawingNameRef = React.useRef(null);
@@ -61,6 +64,21 @@ const NewDrawing = () => {
       .catch((error) => console.error(error));
   };
 
+  const handleLogout = async () => {
+    try {
+      const auth = getAuth();
+      await signOut(auth);
+      dispatch(logout());
+      router.push("/login");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
+  if (!user) {
+    return <div>Redirecting...</div>;
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl space-y-4">
@@ -71,7 +89,7 @@ const NewDrawing = () => {
           </h1>
           <button
             type="button"
-            onClick={() => router.push("/logout")}
+            onClick={handleLogout}
             className="px-4 py-2 text-white
               bg-red-400 rounded-md
               hover:bg-red-500 focus:outline-none

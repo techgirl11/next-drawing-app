@@ -1,18 +1,36 @@
 "use client";
 import React from "react";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Konva from "konva";
+import { getAuth, signOut } from "firebase/auth";
+import { logout } from "../redux/slices/authSlice";
 
 const LoadDrawing = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { selectedDrawing } = useSelector((state) => state.userDrawings);
 
   useEffect(() => {
     Konva.Node.create(selectedDrawing.jsonData, "drawingContainer");
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      const auth = getAuth();
+      await signOut(auth);
+      dispatch(logout());
+      router.push("/login");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
+  if (!user) {
+    return <div>Redirecting...</div>;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -24,7 +42,7 @@ const LoadDrawing = () => {
           </h1>
           <button
             type="button"
-            onClick={() => router.push("/logout")}
+            onClick={handleLogout}
             className="px-4 py-2 text-white
               bg-red-400 rounded-md
               hover:bg-red-500 focus:outline-none
